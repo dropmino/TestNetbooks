@@ -1,0 +1,11 @@
+language: java
+jdk:
+    - openjdk8
+addons:
+    sonarcloud:
+        organization: dropmino
+        token:
+            secure: travis encrypt f784bd89cc5a2a7b3773ec086c0096a05fe842a9
+script:
+    - ant build
+    - sonar-scanner
