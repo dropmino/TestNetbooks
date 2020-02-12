@@ -5,7 +5,7 @@ addons:
     sonarcloud:
         organization: dropmino
         token:
-            secure: travis encrypt f784bd89cc5a2a7b3773ec086c0096a05fe842a9
+            secure: 2955e8e6106e54c9996e362db80d08bfbb84e19c
 script:
     - ant build
     - sonar-scanner
