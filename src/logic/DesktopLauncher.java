@@ -1,14 +1,12 @@
 package logic;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import logic.controller.LoginController;
-import logic.util.ImageFactory;
-import logic.util.enumeration.ImageSet;
-import logic.view.LoginGC;
+import logic.util.AppProperties;
+import logic.util.GraphicalElements;
+import logic.util.ImageDispenser;
+import logic.util.enumeration.Views;
 
 /**
  * Entry point dell'applicazione stand-alone 
@@ -16,30 +14,25 @@ import logic.view.LoginGC;
  *
  */
 public class DesktopLauncher extends Application {
-
+	
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage stage) {
+			
+		Scene scene = GraphicalElements.switchTo(Views.LOGIN, null);
 		
-		FXMLLoader loader = new FXMLLoader(DesktopLauncher.class.getResource("view/resources/fxml/login.fxml"));
-		
-		LoginController controller = new LoginController();
-		LoginGC gc = new LoginGC(controller);
-		loader.setController(gc);
-		Parent root = loader.load();
-		
-		Scene scene = new Scene(root);
-		
-		setupStage(primaryStage, scene);
-		primaryStage.show();	
+ 		initStage(stage, scene);
+		stage.show();	
 	}
 	
-	private void setupStage(Stage stage, Scene scene) {
+	private void initStage(Stage stage, Scene scene) {
+		stage.setTitle(AppProperties.getInstance().getProperty("title"));
 		
-		stage.setTitle("Netbooks v1.0");
-		stage.setResizable(false);		
-		stage.setScene(scene);
+		stage.setWidth(Integer.valueOf(AppProperties.getInstance().getProperty("width")));
+		stage.setHeight(Integer.valueOf(AppProperties.getInstance().getProperty("height")));
+		stage.setResizable(Boolean.valueOf(AppProperties.getInstance().getProperty("resize")));		
 		stage.centerOnScreen();
-		stage.getIcons().add(ImageFactory.getImage(ImageSet.ICON));
+		stage.getIcons().add(ImageDispenser.getImage(ImageDispenser.ICON));
+		stage.setScene(scene);
 	}
 
 	public static void main(String[] args) {

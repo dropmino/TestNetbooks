@@ -1,12 +1,31 @@
-.loginbg {
+.bg {
     -fx-background-image:url('../images/wallpaper.jpg');
-    -fx-background-size: 1024 820; /* dimensioni leggermenti piu grandi delle effettive per una copertura completa*/
     -fx-background-position: center;
 }
 
+.bg-secondary {
+	-fx-background-color: rgb(99,79,58, 0.8);
+}
+
 .loginpanel {
-	-fx-background-color: #e3b584;
+	-fx-background-color: rgb(227,181,132, 0.8);
 	-fx-background-radius: 50px;
+}
+
+.moreinfopanel {
+	-fx-background-color: rgb(227,181,132);
+	-fx-background-radius: 20px;	
+}
+
+.scrollpanebg {
+	-fx-background-color: #f0b884;
+}
+
+.checkboxes-panel {
+	-fx-background-color: rgb(227,181,132, 0.8);
+	-fx-background-radius: 25px;
+	
+	
 }
 
 .success {
@@ -19,3 +38,74 @@
 	-fx-text-fill: #dc143c;
 }
 
+.buybook-panel {
+	-fx-background-color: rgba(201,161,117, 0.7);
+}
+
+.buy-home-btn {
+	-fx-background-color: #00ff00; 
+}
+
+.rate-home-btn {
+	-fx-background-color: #ffff00;
+}
+
+.list-item {
+	-fx-background-color: rgba(163,130,95, 0.8);
+}
+
+.btn {
+	-fx-background-color: #634f3a;
+}
+
+.exBookPanebg {
+	-fx-background-color: rgb(163, 130, 95, 0.75);
+}
+
+.transparent {
+	-fx-background-color: transparent;
+}
+
+.exBookVerticalP {
+	-fx-background-color: #c9a175;
+}
+
+.main-color {
+	-fx-background-color: #e3b584;
+}
+
+.book-details-label {
+	-fx-text-fill: white;
+}
+
+.exBookVBoxInfo {
+	-fx-background-color: rgb(240, 191, 139, 1.0);
+    -fx-border-color: black;
+    -fx-border-width: 1.5;
+}
+
+.exchangeableBookDetails {
+	-fx-background-color: rgb(227,181,132, 0.8);
+	-fx-background-radius: 20px;
+	-fx-border-color: black;
+	-fx-border-radius: 20px;
+    -fx-border-width: 0.9;
+}
+
+.progress-bar {
+	-fx-accent: #e5be01;
+}
+
+.exchangeBookActivities {
+	-fx-background-color: #f0bf8b;
+}
+
+.proposalItem {
+	-fx-background-color: rgb(99,79,58,0.8);
+	-fx-border-color: black;
+	-fx-border-width: 0.9;
+}
+
+.rating :disabled {
+    -fx-opacity: 1;
+}
