@@ -39,13 +39,13 @@ public class DiagramFactory{
 		
 		NumberAxis xAxis = new NumberAxis();
 		CategoryAxis yAxis = new CategoryAxis();
-		BarChart<Number,String> barChart = new BarChart<Number , String>(xAxis,yAxis);
+		BarChart<Number,String> barChart = new BarChart<>(xAxis,yAxis);
 		barChart.setTitle("Top 5 books");
 		xAxis.setLabel("Numero copie vendute");
 		xAxis.setTickLabelRotation(90);
 		yAxis.setLabel("Book title");		
 		barChart.setLegendVisible(false);
-		XYChart.Series<Number, String> series = new XYChart.Series<Number, String>();
+		XYChart.Series<Number, String> series = new XYChart.Series<>();
 		series.getData().add(new XYChart.Data<Number, String>(300, books.get(0).getTitle()));//fare con numero copie
 		series.getData().add(new XYChart.Data<Number, String>(120, books.get(1).getTitle()));
 		barChart.getData().add(series);
