@@ -1,55 +1,67 @@
-package logic;
+package logic.util;
 
-import java.sql.SQLException;
+import java.util.List;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert.AlertType;
-import javafx.stage.Stage;
-import logic.db.DBManager;
-import logic.util.AppProperties;
-import logic.util.GraphicalElements;
-import logic.util.ImageDispenser;
-import logic.util.enumeration.Views;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.Chart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
+import logic.bean.BookBean;
+import logic.util.enumeration.DiagramTypes;
 
-/**
- * Entry point dell'applicazione stand-alone 
- * @author Simone Tiberi (M. 0252795)
- *
- */
-public class DesktopLauncher extends Application {
+public class DiagramFactory{
+	   	 
 	
-	@Override
-	public void start(Stage stage) {
+
+	public Chart createChart(DiagramTypes type , List<BookBean> books ){
+		
+		if (type.equals(DiagramTypes.PIE_CHART))
+			return createPieChart(books);
+		else
+			return createBarChart(books);		
+	}
+	
+	
+	public Chart createPieChart(List<BookBean> books) {
 			
-		Scene scene = GraphicalElements.switchTo(Views.LOGIN, null);
-		
- 		initStage(stage, scene);
-		stage.show();	
+		ObservableList<PieChart.Data> pieChartData =
+        FXCollections.observableArrayList(
+               new PieChart.Data(books.get(0).getTitle() , 300),//fare con numero vero di copie
+			   new PieChart.Data(books.get(1).getTitle() , 120)
+			   );
+        
+       	return new PieChart(pieChartData);
 	}
 	
-	private void initStage(Stage stage, Scene scene) {
-		stage.setTitle(AppProperties.getInstance().getProperty("title"));
+	public Chart createBarChart(List<BookBean> books) {
 		
-		stage.setWidth(Integer.valueOf(AppProperties.getInstance().getProperty("width")));
-		stage.setHeight(Integer.valueOf(AppProperties.getInstance().getProperty("height")));
-		stage.setResizable(Boolean.valueOf(AppProperties.getInstance().getProperty("resize")));		
-		stage.centerOnScreen();
-		stage.getIcons().add(ImageDispenser.getImage(ImageDispenser.ICON));
-		stage.setScene(scene);
+		NumberAxis xAxis = new NumberAxis();
+		CategoryAxis yAxis = new CategoryAxis();
+		BarChart<Number,String> barChart = new BarChart<>(xAxis,yAxis);
+		barChart.setTitle("Top 5 books");
+		xAxis.setLabel("Numero copie vendute");
+		xAxis.setTickLabelRotation(90);
+		yAxis.setLabel("Book title");		
+		barChart.setLegendVisible(false);
+		ObservableList<XYChart.Data<Number,String>> barChartData =
+		        FXCollections.observableArrayList(
+		               new XYChart.Data<Number, String>(300, books.get(0).getTitle()),
+		          
+					   new XYChart.Data<Number, String>(120, books.get(1).getTitle())
+					   );
+		
+		XYChart.Series<Number, String> series = new XYChart.Series<>(barChartData);
+		
+//		series.getData().add(new XYChart.Data<Number, String>(300, books.get(0).getTitle()));//fare con numero copie
+//		series.getData().add(new XYChart.Data<Number, String>(120, books.get(1).getTitle()));
+		barChart.getData().add(series);
+		
+		
+		return barChart;
 	}
 	
-	@Override
-	public void stop() {
-		try {
-			DBManager.closeConnection();
-		} catch (SQLException e) {
-			GraphicalElements.showDialog(AlertType.ERROR, "Ops, something went wrong ..", "Unable to close connection to DB");
-		}
-	}
-
-	public static void main(String[] args) {
-		launch(args);
-	}
-
 }
