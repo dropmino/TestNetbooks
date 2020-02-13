@@ -46,10 +46,11 @@ public class DiagramFactory{
 		yAxis.setLabel("Book title");		
 		barChart.setLegendVisible(false);
 		XYChart.Series<Number, String> series = new XYChart.Series<>(); 
+		series.setName("BarChart");
 		series.getData().add(new XYChart.Data<Number, String>(300, books.get(0).getTitle()));//fare con numero copie
 		series.getData().add(new XYChart.Data<Number, String>(120, books.get(1).getTitle()));
 		barChart.getData().add(series);
-		series = null;
+		
 		
 		return barChart;
 	}

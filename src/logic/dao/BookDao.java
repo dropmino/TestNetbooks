@@ -77,7 +77,7 @@ public class BookDao {
 		else return BookGenres.UNDEFINED;
 	}
 	
-//	 fare per posizione con cordinate del reader if(companyPositio<= valoreSlider)
+//	 fare per posizione con cordinate del reader if(companyPositio<= radius) Ci vanno 8 libri per page 
 	public List<Book> findBookForChart(double latitude, double longitude , int radius) {
 		ArrayList<Book> books = new ArrayList<>();
 		Book tmp1 = new Book("001122" , "La vita" , "Ale");

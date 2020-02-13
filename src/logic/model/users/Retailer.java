@@ -23,10 +23,8 @@ public class Retailer extends User {
 	
 	//metodo che interroga la BookDao
 	public List<Book> getBookFromPosition(int radius) {
-		
-		List<Book> books = BookDao.getInstance().findBookForChart(latitude, longitude , radius);
-		
-		return books;
+			
+		return BookDao.getInstance().findBookForChart(latitude, longitude , radius);
 		
 	}
 	
