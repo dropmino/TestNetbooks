@@ -5,7 +5,7 @@ import java.util.List;
 
 import logic.model.Book;
 import logic.util.ImageDispenser;
-import logic.util.enumeration.BookGenre;
+import logic.util.enumeration.BookGenres;
 
 /**
  * Versione singleton del DAO per l'interazione
@@ -69,16 +69,16 @@ public class BookDao {
 		return books;
 	}
 	
-	public BookGenre findBookByGenre(String genre) {
+	public BookGenres findBookByGenre(String genre) {
 		if (genre.equals("thr"))
-			return BookGenre.THRILLER;
+			return BookGenres.THRILLER;
 		else if (genre.equals("rom"))
-			return BookGenre.ROMANCE;
-		else return BookGenre.UNDEFINED;
+			return BookGenres.ROMANCE;
+		else return BookGenres.UNDEFINED;
 	}
 	
 //	 fare per posizione con cordinate del reader if(companyPositio<= valoreSlider)
-	public List<Book> findBookForChart(double latitude, double longitude) {
+	public List<Book> findBookForChart(double latitude, double longitude , int radius) {
 		ArrayList<Book> books = new ArrayList<>();
 		Book tmp1 = new Book("001122" , "La vita" , "Ale");
 		tmp1.setSmallImage(ImageDispenser.getImage(ImageDispenser.BOOK1));

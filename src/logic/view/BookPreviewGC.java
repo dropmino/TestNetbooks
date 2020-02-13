@@ -12,7 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import logic.bean.BookBean;
 import logic.util.GraphicalElements;
-import logic.util.enumeration.ImageSize;
+import logic.util.enumeration.ImageSizes;
 import logic.util.enumeration.Views;
 
 public class BookPreviewGC implements Initializable{
@@ -37,7 +37,7 @@ public class BookPreviewGC implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		thumbnail.setImage(bean.getSingleImage(ImageSize.SMALL));
+		thumbnail.setImage(bean.getSingleImage(ImageSizes.SMALL));
 		titleLbl.setText(bean.getTitle());
 		authorLbl.setText(bean.getAuthor());
 	}

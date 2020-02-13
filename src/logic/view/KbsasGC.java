@@ -1,12 +1,15 @@
 package logic.view;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.chart.Chart;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -24,7 +27,7 @@ import logic.bean.BookBean;
 import logic.controller.KbsasController;
 import logic.util.DiagramFactory;
 import logic.util.GraphicalElements;
-import logic.util.enumeration.DiagramType;
+import logic.util.enumeration.DiagramTypes;
 import logic.util.enumeration.DynamicElements;
 import logic.util.enumeration.Views;
 
@@ -34,7 +37,7 @@ import logic.util.enumeration.Views;
  *
  */
 
-public class KbsasGC {
+public class KbsasGC implements Initializable{
 
 	@FXML
     private Button buttonVBS;
@@ -71,18 +74,31 @@ public class KbsasGC {
     
     private Chart chart;
 	private List<BookBean> books;
+	
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		
+		try {
+			KbsasController controller;
+			controller = new KbsasController();
+			books = controller.getBooksForRetailer((int)Math.round(slider.getValue()));
+			appendBooksOnPane(books);
+		} catch (Exception e) {
+			GraphicalElements.showDialog(AlertType.ERROR, "Ops, something went wrong ...", "Unable to load chart");
+			Platform.exit();
+		}
+		
+	}
+	
     
 	@FXML
 	public void showBestsellers() {
 		
-		labelRes.setVisible(true);
-		menuButton.setVisible(true);
-		line.setVisible(true);
-	
 		try {
 			KbsasController controller;
 			controller = new KbsasController();
-			books = controller.getBooksForRetailer();
+			books = controller.getBooksForRetailer((int)Math.round(slider.getValue()));
 			appendBooksOnPane(books);
 		} catch (Exception e) {
 			GraphicalElements.showDialog(AlertType.ERROR, "Ops, something went wrong ...", "Unable to load chart");
@@ -117,7 +133,7 @@ public class KbsasGC {
 	 @FXML
 	 public void barChartAction()  {
 		 DiagramFactory factory  = new DiagramFactory();
-		 chart = factory.createChart(DiagramType.BAR_CHART, books);
+		 chart = factory.createChart(DiagramTypes.BAR_CHART, books);
 		 chart.setTitle("Top 5 book (radius selected = " + (int)Math.round(slider.getValue()) +"KM)");
 		 
 		 Stage stage = (Stage)borderPane.getScene().getWindow();
@@ -128,7 +144,7 @@ public class KbsasGC {
 	 @FXML
 	 public void pieChartAction() {
 	    DiagramFactory factory  = new DiagramFactory();
-		chart = factory.createChart(DiagramType.PIE_CHART, books);
+		chart = factory.createChart(DiagramTypes.PIE_CHART, books);
 		chart.setTitle("Top 5 book (radius selected = " + (int)Math.round(slider.getValue()) +"KM)");
 
 		Stage stage = (Stage)borderPane.getScene().getWindow();
@@ -145,4 +161,5 @@ public class KbsasGC {
 			 stage.setScene(GraphicalElements.switchTo(Views.LOGIN, null));
 		 }
 	 }
+
 }

@@ -1,6 +1,6 @@
 package logic.dao;
 
-import logic.util.enumeration.UserType;
+import logic.util.enumeration.UserTypes;
 
 /**
  * Versione singleton del DAO per l'interazione
@@ -23,12 +23,12 @@ public class AbstractUserDao {
 		return instance;
 	}
 	
-	public UserType findUserByUsernameAndPassword(String user, String passwd) {
+	public UserTypes findUserByUsernameAndPassword(String user, String passwd) {
 		if (user.equals("acs") && passwd.equals("acs"))
-			return UserType.READER;
+			return UserTypes.READER;
 		else if (user.equals("ret") && passwd.equals("ret"))
-			return UserType.RETAILER;
+			return UserTypes.RETAILER;
 		else
-			return UserType.INVALID_USER;
+			return UserTypes.INVALID_USER;
 	}
 }

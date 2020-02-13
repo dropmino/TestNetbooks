@@ -3,7 +3,7 @@ package logic.controller;
 import logic.bean.UserBean;
 import logic.dao.AbstractUserDao;
 import logic.util.Session;
-import logic.util.enumeration.UserType;
+import logic.util.enumeration.UserTypes;
 
 /**
  * Controller del caso d'uso "Login"
@@ -12,13 +12,13 @@ import logic.util.enumeration.UserType;
  */
 public class LoginController {
 
-	public UserType loginUser(UserBean bean) {
+	public UserTypes loginUser(UserBean bean) {
 		String user = bean.getUsername();
 		String passwd = bean.getPassword();
 		
-		UserType type = AbstractUserDao.getInstance().findUserByUsernameAndPassword(user, passwd);
+		UserTypes type = AbstractUserDao.getInstance().findUserByUsernameAndPassword(user, passwd);
 		
-		if (!type.equals(UserType.INVALID_USER))
+		if (!type.equals(UserTypes.INVALID_USER))
 			Session.getSession().setCurrUser(user);
 
 		return type;

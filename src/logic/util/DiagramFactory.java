@@ -11,13 +11,13 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import logic.bean.BookBean;
-import logic.util.enumeration.DiagramType;
+import logic.util.enumeration.DiagramTypes;
 
 public class DiagramFactory{
 	   	 
-	public Chart createChart(DiagramType type , List<BookBean> books ){
+	public Chart createChart(DiagramTypes type , List<BookBean> books ){
 		
-		if (type.equals(DiagramType.PIE_CHART))
+		if (type.equals(DiagramTypes.PIE_CHART))
 			return createPieChart(books);
 		else
 			return createBarChart(books);		
@@ -45,10 +45,11 @@ public class DiagramFactory{
 		xAxis.setTickLabelRotation(90);
 		yAxis.setLabel("Book title");		
 		barChart.setLegendVisible(false);
-		XYChart.Series<Number, String> series1 = new XYChart.Series<>(); 
-		series1.getData().add(new XYChart.Data<Number, String>(300, books.get(0).getTitle()));//fare con numero copie
-		series1.getData().add(new XYChart.Data<Number, String>(120, books.get(1).getTitle()));
-		barChart.getData().add(series1);
+		XYChart.Series<Number, String> series = new XYChart.Series<>(); 
+		series.getData().add(new XYChart.Data<Number, String>(300, books.get(0).getTitle()));//fare con numero copie
+		series.getData().add(new XYChart.Data<Number, String>(120, books.get(1).getTitle()));
+		barChart.getData().add(series);
+		series = null;
 		
 		return barChart;
 	}

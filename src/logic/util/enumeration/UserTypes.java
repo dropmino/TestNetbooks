@@ -5,7 +5,7 @@ package logic.util.enumeration;
  * @author Simone Tiberi (M. 0252795)
  *
  */
-public enum UserType {
+public enum UserTypes {
 	READER,
 	RETAILER,
 	INVALID_USER

@@ -13,7 +13,7 @@ import logic.model.Book;
 
 public class Retailer extends User {
 	
-	public Retailer(String username, String email, String company) {
+	public Retailer(String username, String email) {
 		super(username, email);		
 	}
 	
@@ -22,9 +22,9 @@ public class Retailer extends User {
 	}	
 	
 	//metodo che interroga la BookDao
-	public List<Book> getBookFromPosition() {
+	public List<Book> getBookFromPosition(int radius) {
 		
-		List<Book> books = BookDao.getInstance().findBookForChart(latitude, longitude);
+		List<Book> books = BookDao.getInstance().findBookForChart(latitude, longitude , radius);
 		
 		return books;
 		

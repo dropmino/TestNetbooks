@@ -19,7 +19,7 @@ import logic.bean.UserBean;
 import logic.controller.LoginController;
 import logic.exception.WrongSyntaxException;
 import logic.util.GraphicalElements;
-import logic.util.enumeration.UserType;
+import logic.util.enumeration.UserTypes;
 import logic.util.enumeration.Views;
 
 /**
@@ -73,15 +73,15 @@ public class LoginGC implements Initializable{
 			String password = passwordTxt.getText();
 			UserBean bean = new UserBean(username, password);
 
-			UserType type = controller.loginUser(bean);
+			UserTypes type = controller.loginUser(bean);
 			
-			if(type.equals(UserType.INVALID_USER)) {
+			if(type.equals(UserTypes.INVALID_USER)) {
 				resultLbl.getStyleClass().add("error");
 				resultLbl.setText("LOGIN FAILED");
 			}
 			else {
 				stage = (Stage) pane.getScene().getWindow();
-				if (type.equals(UserType.READER))
+				if (type.equals(UserTypes.READER))
 					stage.setScene(GraphicalElements.switchTo(Views.HOME, null));
 				else
 					stage.setScene(GraphicalElements.switchTo(Views.KBSAS, null));
