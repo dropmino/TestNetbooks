@@ -122,12 +122,13 @@ public class BookDao {
 				Book book = new Book(results.getString("isbn") , results.getString("title") , results.getString("author") );
 				numOfCopySold = results.getInt("count(*)");
 				bookInChart.put(book, numOfCopySold);
+				book.setSmallImage(ImageDispenser.getCovers(book.getTitle(), ImageSizes.SMALL));
 			}
 			
 			return bookInChart;
 			
 		} catch (ClassNotFoundException | SQLException e) {
-			throw new PersistencyException("Unable to retrive already inserted reviews from DB");
+			throw new PersistencyException("Unable to load books for homepage");
 		} finally {
 			DBManager.closeRs(results);
 			DBManager.closeStmt(stmt);		}

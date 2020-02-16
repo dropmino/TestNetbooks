@@ -19,34 +19,8 @@ import logic.util.enumeration.ImageSizes;
  *
  */
 
-/*
- * 
-	public Map<UserBean, BookEvaluationBean> getBookReviews(BookBean bean) throws PersistencyException {
-		Map<Reader, BookEvaluation> reviews = EvaluationDao.getPreviousReviews(bean.getIsbn());
-		Map<UserBean, BookEvaluationBean> reviewsBean = new HashMap<>();
-		
-		for (Reader reader : reviews.keySet()) {
-			UserBean usrBean = new UserBean();
-			BookEvaluationBean evalbean = new BookEvaluationBean();
-			try {
-				usrBean.setUsername(reader.getUsername());
-			} catch (WrongSyntaxException e) {
-				throw new IllegalStateException("Username from DB must respect constraints");
-			}
-			evalbean.setTitle(reviews.get(reader).getTitle());
-			evalbean.setBody(reviews.get(reader).getBody());
-			
-			reviewsBean.put(usrBean, evalbean);
-		}
-		
-		return reviewsBean;
-	}*/
-
-
 public class KbsasController {
 	
-	//deve interrogare il Reatailer 
-
 	public Map<BookBean , Integer> getBooksForRetailer(int radius) throws PersistencyException {
 		
 		
@@ -65,13 +39,9 @@ public class KbsasController {
 			mapBeans.put(bean, entry.getValue());	 
 		}
 		
-		Map<BookBean, Integer> order =
-			    mapBeans.entrySet().stream()
-			       .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-			       .collect(Collectors.toMap(
-			          Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-
-		return order;	
+		
+		return mapBeans.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+			       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 	}
 
 }

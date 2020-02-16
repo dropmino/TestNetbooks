@@ -27,7 +27,7 @@ public class Retailer extends User {
 		this.company = company;
 	}
 
-	public Retailer(String username, String email, String company) {
+	public Retailer(String username, String email) {
 		super(username, email);		
 	}
 	

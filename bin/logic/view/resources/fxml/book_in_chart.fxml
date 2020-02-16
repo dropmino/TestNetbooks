@@ -9,7 +9,7 @@
    <children>
       <HBox fx:id="hBoxInteral" prefHeight="65.0" prefWidth="142.0">
          <children>
-            <Label fx:id="position" alignment="CENTER" prefHeight="120.0" prefWidth="87.0" style="-fx-font-weight: bold;" text="#POSITION" textFill="WHITE" />
+            <Label fx:id="position" alignment="CENTER" prefHeight="65.0" prefWidth="119.0" style="-fx-font-weight: bold;" text="#POSITION" textFill="WHITE" />
             <ImageView fx:id="image" fitHeight="60.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </HBox>
@@ -19,7 +19,7 @@
             <Label alignment="CENTER" prefHeight="55.0" prefWidth="142.0" style="-fx-font-weight: bold;" text="Author : " textAlignment="CENTER" textFill="WHITE" />
          </children>
       </VBox>
-      <VBox fx:id="vBox" prefHeight="65.0" prefWidth="124.0">
+      <VBox fx:id="vBox" prefHeight="65.0" prefWidth="246.0">
          <children>
             <Label fx:id="lblBookName" alignment="BOTTOM_LEFT" prefHeight="55.0" prefWidth="212.0" text="NOME LIBRO" textFill="WHITE" />
             <Label fx:id="lblBookAuthor" prefHeight="55.0" prefWidth="212.0" text="AUTORE" textFill="WHITE" />

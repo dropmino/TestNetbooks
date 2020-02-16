@@ -122,7 +122,7 @@ public class KbsasGC implements Initializable{
 		List<HBox> list = new ArrayList<>();
 		int rank = 1;
 
-		for (Map.Entry<BookBean, Integer> entry : bookInChart.entrySet()) {
+		for (Map.Entry<BookBean, Integer> entry : books.entrySet()) {
 			BookInChartGC gc = new BookInChartGC( rank , entry.getKey(), entry.getValue() );
 			rank++;
 			FXMLLoader loader = GraphicalElements.loadFXML(DynamicElements.BOOK_IN_CHART);
