@@ -2,6 +2,7 @@ package logic.view.evaluationdecorator;
 
 import javafx.scene.layout.VBox;
 import logic.bean.BookBean;
+import logic.exception.PersistencyException;
 
 /**
  * Classe <b>Component</b> del pattern <i>Decorator</i> dei GoF.<br>
@@ -13,6 +14,6 @@ import logic.bean.BookBean;
  */
 public interface Showable {
 
-	public VBox show(BookBean bean);
+	public VBox show(BookBean bean) throws PersistencyException;
 
 }

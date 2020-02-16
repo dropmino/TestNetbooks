@@ -5,7 +5,9 @@ import java.util.List;
 
 import logic.bean.BookBean;
 import logic.dao.BookDao;
+import logic.exception.PersistencyException;
 import logic.model.Book;
+import logic.util.Session;
 import logic.util.enumeration.ImageSizes;
 
 /**
@@ -15,14 +17,14 @@ import logic.util.enumeration.ImageSizes;
  */
 public class BuyBookController {
 	
-	private ManageRatingsController rrController;
+	private ManageEvaluationsController manageEvaluationsController;
 
-	public BuyBookController(ManageRatingsController secondaryController) {
-		this.rrController = secondaryController;
+	public BuyBookController(ManageEvaluationsController secondaryController) {
+		this.manageEvaluationsController = secondaryController;
 	}
 
-	public List<BookBean> getBooksForHomepage() {
-		List<Book> books = BookDao.getInstance().findBooksForHomepage();
+	public List<BookBean> getBooksForHomepage() throws PersistencyException {
+		List<Book> books = BookDao.findBooksForHomepage(Session.getSession().getCurrUser());
 		ArrayList<BookBean> beans = new ArrayList<>();
 		
 		for (Book b : books) {
@@ -39,7 +41,7 @@ public class BuyBookController {
 		return beans;	
 	}
 	
-	public ManageRatingsController getRRController() {
-		return rrController;
+	public ManageEvaluationsController getManageEvaluationsController() {
+		return manageEvaluationsController;
 	}
 }

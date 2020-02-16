@@ -2,22 +2,29 @@ package logic.model;
 
 import logic.model.users.User;
 
+/**
+ * Entita'  del dominio di interesse: Valutazione
+ * @author Simone Tiberi (M. 0252795)
+ *
+ */
 public class BookEvaluation {
 	
-	private double rating;
+	private int rating;
 	private String title;
 	private String body;
 	
 	private User author;
 	private Book relatedBook;
 	
-	public BookEvaluation(User author, Book relatedBook, double rating) {
+	public BookEvaluation() {}
+	
+	public BookEvaluation(User author, Book relatedBook, int rating) {
 		this.author = author;
 		this.relatedBook = relatedBook;
 		this.rating = rating;
 	}
 
-	public double getRating() {
+	public int getRating() {
 		return rating;
 	}
 	

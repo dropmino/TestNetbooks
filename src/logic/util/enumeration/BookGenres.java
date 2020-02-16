@@ -14,5 +14,6 @@ public enum BookGenres {
 	SCIENCE,
 	THRILLER,
 	ADULT,
-	UNDEFINED;
+	UNDEFINED,
+	FANTASY
 }

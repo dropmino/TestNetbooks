@@ -1,7 +1,9 @@
 package logic.controller;
 
 import logic.bean.UserBean;
-import logic.dao.AbstractUserDao;
+import logic.dao.UserDao;
+import logic.exception.NoUserFoundException;
+import logic.exception.PersistencyException;
 import logic.util.Session;
 import logic.util.enumeration.UserTypes;
 
@@ -12,14 +14,12 @@ import logic.util.enumeration.UserTypes;
  */
 public class LoginController {
 
-	public UserTypes loginUser(UserBean bean) {
+	public UserTypes loginUser(UserBean bean) throws NoUserFoundException, PersistencyException {
 		String user = bean.getUsername();
 		String passwd = bean.getPassword();
 		
-		UserTypes type = AbstractUserDao.getInstance().findUserByUsernameAndPassword(user, passwd);
-		
-		if (!type.equals(UserTypes.INVALID_USER))
-			Session.getSession().setCurrUser(user);
+		UserTypes type = UserDao.findUserByUsernameAndPassword(user, passwd);
+		Session.getSession().setCurrUser(user);
 
 		return type;
 	}

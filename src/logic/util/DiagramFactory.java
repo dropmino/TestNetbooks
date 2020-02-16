@@ -1,6 +1,6 @@
 package logic.util;
 
-import java.util.List;
+import java.util.Map;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,10 +15,7 @@ import logic.util.enumeration.DiagramTypes;
 
 public class DiagramFactory{
 	   	 
-	
-
-	public Chart createChart(DiagramTypes type , List<BookBean> books ){
-		
+	public Chart createChart(DiagramTypes type , Map<BookBean, Integer> books ){		
 		if (type.equals(DiagramTypes.PIE_CHART))
 			return createPieChart(books);
 		else
@@ -26,18 +23,24 @@ public class DiagramFactory{
 	}
 	
 	
-	public Chart createPieChart(List<BookBean> books) {
+	public Chart createPieChart(Map<BookBean, Integer> books) {
 			
-		ObservableList<PieChart.Data> pieChartData =
-        FXCollections.observableArrayList(
-               new PieChart.Data(books.get(0).getTitle() , 300),//fare con numero vero di copie
-			   new PieChart.Data(books.get(1).getTitle() , 120)
-			   );
-        
-       	return new PieChart(pieChartData);
+		int index = 0;
+		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+		
+		for (Map.Entry<BookBean, Integer> entry : books.entrySet()) {
+			if(index == 5) break;
+			index++;
+			pieChartData.add(new PieChart.Data(entry.getKey().getTitle(), entry.getValue()));
+		}
+		
+		return new PieChart(pieChartData);
+		
 	}
 	
-	public Chart createBarChart(List<BookBean> books) {
+	public Chart createBarChart(Map<BookBean, Integer> books) {
+		
+		int index = 0;
 		
 		NumberAxis xAxis = new NumberAxis();
 		CategoryAxis yAxis = new CategoryAxis();
@@ -47,17 +50,13 @@ public class DiagramFactory{
 		xAxis.setTickLabelRotation(90);
 		yAxis.setLabel("Book title");		
 		barChart.setLegendVisible(false);
-		ObservableList<XYChart.Data<Number,String>> barChartData =
-		        FXCollections.observableArrayList(
-		               new XYChart.Data<Number, String>(300, books.get(0).getTitle()),
-		          
-					   new XYChart.Data<Number, String>(120, books.get(1).getTitle())
-					   );
+		XYChart.Series<Number, String> series = new XYChart.Series<>();
 		
-		XYChart.Series<Number, String> series = new XYChart.Series<>(barChartData);
-		
-//		series.getData().add(new XYChart.Data<Number, String>(300, books.get(0).getTitle()));//fare con numero copie
-//		series.getData().add(new XYChart.Data<Number, String>(120, books.get(1).getTitle()));
+		for (Map.Entry<BookBean, Integer> entry : books.entrySet()) {
+				if(index == 5) break;
+				index++;
+				series.getData().add(new XYChart.Data<Number, String>(entry.getValue(), entry.getKey().getTitle()));
+		}
 		barChart.getData().add(series);
 		
 		

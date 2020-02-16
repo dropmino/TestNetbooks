@@ -1,12 +1,17 @@
 package logic.controller;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import logic.util.enumeration.ImageSizes;
 import logic.bean.BookBean;
+import logic.dao.BookDao;
+import logic.exception.PersistencyException;
 import logic.model.Book;
 import logic.model.users.Retailer;
+import logic.util.enumeration.ImageSizes;
 
 /**
  * Controller del caso d'uso "known best sellers around shop"
@@ -14,28 +19,59 @@ import logic.model.users.Retailer;
  *
  */
 
+/*
+ * 
+	public Map<UserBean, BookEvaluationBean> getBookReviews(BookBean bean) throws PersistencyException {
+		Map<Reader, BookEvaluation> reviews = EvaluationDao.getPreviousReviews(bean.getIsbn());
+		Map<UserBean, BookEvaluationBean> reviewsBean = new HashMap<>();
+		
+		for (Reader reader : reviews.keySet()) {
+			UserBean usrBean = new UserBean();
+			BookEvaluationBean evalbean = new BookEvaluationBean();
+			try {
+				usrBean.setUsername(reader.getUsername());
+			} catch (WrongSyntaxException e) {
+				throw new IllegalStateException("Username from DB must respect constraints");
+			}
+			evalbean.setTitle(reviews.get(reader).getTitle());
+			evalbean.setBody(reviews.get(reader).getBody());
+			
+			reviewsBean.put(usrBean, evalbean);
+		}
+		
+		return reviewsBean;
+	}*/
+
+
 public class KbsasController {
 	
 	//deve interrogare il Reatailer 
 
-	public List<BookBean> getBooksForRetailer(int radius) {
+	public Map<BookBean , Integer> getBooksForRetailer(int radius) throws PersistencyException {
 		
 		
+		Retailer ret = new Retailer("user");
+		ret.setLatitude(41.85545800000001);//si imposterà con reg
+		ret.setLongitude(12.6228887);// si imposterà con reg
 		
-		Retailer ret = new Retailer("Test", "Retailer");
 		
-		List<Book> books = ret.getBookFromPosition(radius);
+		Map<Book , Integer> books = BookDao.findBookForChart(ret.getLatitude(), ret.getLongitude(), radius);
 		
-		ArrayList<BookBean> beans = new ArrayList<>();	
-		
-		for (Book b : books) {
-			BookBean bean = new BookBean(b.getTitle(), b.getAuthor());
-			bean.setSingleImage(b.getSmallImage(), ImageSizes.SMALL);
-		
-			beans.add(bean);	
+		Map<BookBean , Integer> mapBeans = new HashMap<>();	
+
+		for (Map.Entry<Book, Integer> entry : books.entrySet()) {
+			BookBean bean = new BookBean(entry.getKey().getTitle(), entry.getKey().getAuthor());
+			bean.setSingleImage(entry.getKey().getSmallImage(), ImageSizes.SMALL);
+			mapBeans.put(bean, entry.getValue());	 
 		}
 		
-		return beans;	
+		Map<BookBean, Integer> order =
+			    mapBeans.entrySet().stream()
+			       .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+			       .collect(Collectors.toMap(
+			          Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+		return order;	
 	}
 
 }

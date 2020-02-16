@@ -2,6 +2,7 @@ package logic.view.evaluationdecorator;
 
 import javafx.scene.layout.VBox;
 import logic.bean.BookBean;
+import logic.exception.PersistencyException;
 /**
  * Classe <b>Decorator</b> del pattern <i>Decorator</i> dei GoF.<br>
  * Aggrega l'interfaccia {@link Showable} mantenendone dunque un riferimento.
@@ -18,7 +19,7 @@ public abstract class BoxDecorator implements Showable {
 	}
 	
 	@Override
-	public VBox show(BookBean bean) {
+	public VBox show(BookBean bean) throws PersistencyException {
 		return box.show(bean);
 	}
 }

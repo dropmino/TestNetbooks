@@ -76,7 +76,7 @@ public class GraphicalElements {
 		try {
 			
 			if (nextView.equals(Views.LOGIN)) {
-				Session.getSession().setCurrUser("");
+				Session.getSession().setCurrUser(null);
 				return new Scene(loadFXML(nextView).load());
 			}
 			else {
@@ -92,7 +92,6 @@ public class GraphicalElements {
 
 		}
 		catch(IOException e) {
-			e.printStackTrace();
 			return new Scene(create404Page(nextView.toString().toLowerCase()));			
 		}
 	}

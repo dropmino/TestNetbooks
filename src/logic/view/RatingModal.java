@@ -19,9 +19,17 @@ import javafx.stage.Stage;
 import logic.bean.BookBean;
 import logic.bean.BookEvaluationBean;
 import logic.controller.BuyBookController;
-import logic.controller.ManageRatingsController;
+import logic.controller.ManageEvaluationsController;
+import logic.exception.PersistencyException;
 import logic.util.GraphicalElements;
 
+/**
+ * Interfaccia grafica del caso d'uso "Manage evaluations"
+ * Realizzata direttamente in Java e non in FXML per via della presenza
+ * di elementi non nativi javafx (Rating)
+ * @author Simone Tiberi (M. 0252795)
+ *
+ */
 public class RatingModal extends VBox{
 	
 	private static final int SPACING = 40;
@@ -40,13 +48,13 @@ public class RatingModal extends VBox{
 	private Button submitBtn;
 	
 	private BookBean bookBean;
-	private BookEvaluationBean ratingBean; 
+	private BookEvaluationBean oldEvaluationBean; 
 	
 	private BuyBookController controller;
 	
-	public RatingModal (BookBean bean) {
+	public RatingModal (BookBean bean) throws PersistencyException {
 		this.bookBean = bean;
-		this.controller = new BuyBookController(new ManageRatingsController());
+		this.controller = new BuyBookController(new ManageEvaluationsController());
 		
 		this.getStylesheets().add(RatingModal.class.getResource("resources/css/style.css").toExternalForm());
 		this.getStyleClass().add("bg-secondary");
@@ -57,26 +65,26 @@ public class RatingModal extends VBox{
 		initComponents();
 		handleComponents();
 		
-		ratingBean = controller.getRRController().getPreviousReview(bookBean);
-		
-		if (ratingBean != null)
+		oldEvaluationBean = controller.getManageEvaluationsController().getPreviousEvaluation(bookBean);
+		if (oldEvaluationBean != null)
 			fillForm();
 		
 		submitBtn.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				BookEvaluationBean bean = new BookEvaluationBean();
-				bean.setRate(rate.getRating());
-				bean.setTitle(reviewTitleTxt.getText());
-				bean.setBody(reviewBodyTxt.getText());
 				
-				if (controller.getRRController().addNewEvaluation(bean))
+				BookEvaluationBean evalBean = new BookEvaluationBean();
+				evalBean.setRate((int) rate.getRating());
+				evalBean.setTitle(reviewTitleTxt.getText());
+				evalBean.setBody(reviewBodyTxt.getText());
+				
+				try {
+					controller.getManageEvaluationsController().addNewEvaluation(evalBean, bookBean);
 					GraphicalElements.showDialog(AlertType.INFORMATION, "Netbooks says ...", "Your evaluation has been succesfully posted!");
-				else
+				} catch (PersistencyException e) {
 					GraphicalElements.showDialog(AlertType.ERROR, "Ops, something went wrong", "Unable to post your evaluation");
-
-					
+				}
 				Stage currStage = (Stage) submitBtn.getScene().getWindow();
 				currStage.close();
 			}
@@ -84,9 +92,9 @@ public class RatingModal extends VBox{
 	}
 
 	private void fillForm() {
-		rate.setRating(ratingBean.getRate());
-		reviewTitleTxt.setText(ratingBean.getTitle());
-		reviewBodyTxt.setText(ratingBean.getBody());
+		rate.setRating(oldEvaluationBean.getRate());
+		reviewTitleTxt.setText(oldEvaluationBean.getTitle());
+		reviewBodyTxt.setText(oldEvaluationBean.getBody());
 	}
 
 	private void handleComponents() {
@@ -104,7 +112,6 @@ public class RatingModal extends VBox{
 		rate.setRating(0);
 		rate.setUpdateOnHover(true);
 		rate.setOrientation(Orientation.HORIZONTAL);
-		rate.setPartialRating(true);
 		
 		VBox ratingBox = new VBox(rate);
 		ratingBox.setAlignment(Pos.CENTER);
@@ -121,6 +128,9 @@ public class RatingModal extends VBox{
 		
 		reviewBodyLbl.setText("REVIEW BODY (optional)");
 		reviewBodyLbl.setFont(Font.font(DEF_FONT_STYLE, FontWeight.BOLD, 15));
+		
+		reviewBodyTxt.setWrapText(true);
+		reviewBodyTxt.getStyleClass().add("review-txt-area");
 		
 		VBox revBodyBox = new VBox(reviewBodyLbl, reviewBodyTxt);
 		revBodyBox.setAlignment(Pos.CENTER);

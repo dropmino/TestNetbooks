@@ -1,59 +1,87 @@
 package logic.dao;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import logic.db.DBManager;
+import logic.db.DBOperation;
+import logic.db.Query;
+import logic.exception.PersistencyException;
 import logic.model.Book;
 import logic.util.ImageDispenser;
 import logic.util.enumeration.BookGenres;
+import logic.util.enumeration.ImageSizes;
 
 /**
  * Versione singleton del DAO per l'interazione
  * con lo strato di persistenza per l'entity {@link Book}
  * @author Simone Tiberi (M. 0252795)
  * @author Cristiano Cuffaro (M. 0252795)
- *
+ * @author Alessandro Calomino (M. 0258841)
  */
 public class BookDao {
 	
-	private Book book1 = new Book("000001", "La Divina Commedia", "Dante");
-	private Book book2 = new Book("000002", "The Great Gatsby", "F. Fitzgerhald");
-	
-	private static BookDao instance;
+	private static Book book1 = new Book("000001", "La Divina Commedia", "Dante");
+	private static Book book2 = new Book("000002", "The Great Gatsby", "F. Fitzgerhald");
 	
 	private BookDao() {
-		/* gestione connessione db */
+		/* non instanziabile */
 	}
 	
-	public static BookDao getInstance() {
-		if (instance == null)
-			instance = new BookDao();
+	private static Book buildBookFromResultSet(ResultSet res) throws SQLException {
+		String isbn = res.getString("isbn");
+		String title = res.getString("title");
+		String author = res.getString("author");
 		
-		return instance;
-	}
-	
-	public List<Book> findBooksForHomepage() {
-		ArrayList<Book> books = new ArrayList<>();
-		Book tmp = new Book("112233", "Another Test", "Boh Boh");
-		tmp.setSmallImage(ImageDispenser.getImage(ImageDispenser.BOOK_TEST_THUMBNAIL));
-		tmp.setLargeImage(ImageDispenser.getImage(ImageDispenser.BOOK_TEST));
-		tmp.setYearOfPublication(1998);
-		tmp.setPublisher("Feltrinelli");
-		tmp.setLanguage("Aramaico");
-		books.add(tmp);
+		Book book = new Book(isbn, title, author);
+		book.setAmazonLink(res.getString("link_amz"));
+		book.setLanguage(res.getString("language"));
+		book.setLargeImage(ImageDispenser.getCovers(book.getTitle(), ImageSizes.LARGE));
+		book.setMediumImage(ImageDispenser.getCovers(book.getTitle(), ImageSizes.MEDIUM));
+		book.setMondadoriLink(res.getString("link_mnd"));
+		book.setPlayLink(res.getString("link_play"));
+		book.setPublisher(res.getString("publisher"));
+		book.setSmallImage(ImageDispenser.getCovers(book.getTitle(), ImageSizes.SMALL));
+		book.setYearOfPublication(res.getInt("year"));
 		
-		Book tmp2 = new Book("001122", "Simone 2", "Bello Mio");
-		tmp2.setSmallImage(ImageDispenser.getImage(ImageDispenser.BOOK_TEST_THUMBNAIL));
-		tmp2.setLargeImage(ImageDispenser.getImage(ImageDispenser.BOOK_TEST));
-		tmp2.setYearOfPublication(1998);
-		tmp2.setPublisher("Mondadori");
-		tmp2.setLanguage("Italiano");
-		books.add(tmp2);
-
-		return books;
+		return book;
+		
 	}
 	
-	public List<Book> findExchangeableBooks(String username) {
+	public static List<Book> findBooksForHomepage(String user) throws PersistencyException  {
+		
+		CallableStatement stmt = null;
+		ResultSet results = null;
+		
+		try {
+			List<Book> books = new ArrayList<>();
+			Connection conn = DBManager.getConnection();
+			stmt = conn.prepareCall(Query.GET_BOOKS_FOR_HP_SP);
+			results = DBOperation.bindParameters(stmt, user);
+			
+			while (results.next()) {
+				Book tmp = BookDao.buildBookFromResultSet(results);
+				books.add(tmp);	
+			}
+			 
+			return books;
+			
+		} catch(ClassNotFoundException | SQLException e) {
+			throw new PersistencyException("Unable to load books for homepage");
+		}
+		finally {
+			DBManager.closeRs(results);
+			DBManager.closeStmt(stmt);
+		}
+	}
+	
+	public static List<Book> findExchangeableBooks(String username) {
 		List<Book> books = new ArrayList<>();
 		
 		if (username.equals("")) {
@@ -77,18 +105,37 @@ public class BookDao {
 		else return BookGenres.UNDEFINED;
 	}
 	
-//	 fare per posizione con cordinate del reader if(companyPositio<= radius) Ci vanno 8 libri per page 
-	public List<Book> findBookForChart(double latitude, double longitude , int radius) {
-		ArrayList<Book> books = new ArrayList<>();
-		Book tmp1 = new Book("001122" , "La vita" , "Ale");
-		tmp1.setSmallImage(ImageDispenser.getImage(ImageDispenser.BOOK1));
-		books.add(tmp1);
-			
-		Book tmp2 = new Book("001123" , "Il miracolo" , "Fra");
-		tmp2.setSmallImage(ImageDispenser.getImage(ImageDispenser.BOOK2));
-		books.add(tmp2);
+	
+	public static  Map<Book, Integer> findBookForChart(double latitude, double longitude , int radius) throws PersistencyException {
 		
-		return books;		
+		CallableStatement stmt = null;
+		ResultSet results = null;
+		int numOfCopySold = 0 ;
+		
+		try {
+			Map<Book, Integer> bookInChart = new HashMap<>();
+			Connection conn = DBManager.getConnection();
+			stmt = conn.prepareCall(Query.GET_BOOK_FOR_CHART_SP);
+			results = DBOperation.bindParametersAndExec(stmt, latitude, longitude, radius);
+			
+			while (results.next()) {
+				Book book = new Book(results.getString("isbn") , results.getString("title") , results.getString("author") );
+				numOfCopySold = results.getInt("count(*)");
+				bookInChart.put(book, numOfCopySold);
+			}
+			
+			return bookInChart;
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			throw new PersistencyException("Unable to retrive already inserted reviews from DB");
+		} finally {
+			DBManager.closeRs(results);
+			DBManager.closeStmt(stmt);		}
+		
 	}
-
+		
+		
+	
 }
+
+

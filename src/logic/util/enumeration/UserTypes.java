@@ -6,7 +6,14 @@ package logic.util.enumeration;
  *
  */
 public enum UserTypes {
+	
+	/**
+	 * Valore corrisponente nella base di dati: 1
+	 */
 	READER,
+	
+	/**
+	 * Valore corrispondente nella base di dati: 0
+	 */
 	RETAILER,
-	INVALID_USER
 }

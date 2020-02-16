@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -18,8 +19,13 @@
    <right>
       <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="206.0" spacing="50.0" styleClass="buybook-panel" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="TOP_RIGHT" prefHeight="48.0" prefWidth="208.0">
+            <HBox fx:id="hBoxBtn" alignment="TOP_RIGHT" prefHeight="48.0" prefWidth="208.0">
                <children>
+                  <Label fx:id="lblUser" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="113.0" textFill="#070707">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                   <Button fx:id="profileBtn" ellipsisString="" mnemonicParsing="false" prefHeight="40.0" prefWidth="41.0" styleClass="transparent" text="Button">
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -91,7 +97,7 @@
    <center>
       <HBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER" prefHeight="800.0" prefWidth="787.0" spacing="30.0">
+            <VBox alignment="TOP_CENTER" spacing="30.0">
                <children>
                   <HBox alignment="CENTER" prefHeight="77.0" prefWidth="464.0" spacing="40.0">
                      <children>
@@ -115,7 +121,11 @@
                      </children>
                   </HBox>
                   <Line fx:id="line" endX="335.16668701171875" startX="-379.0" stroke="WHITE" />
-                  <VBox fx:id="vboxMain" alignment="TOP_CENTER" prefHeight="620.0" prefWidth="768.0" />
+                  <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="scrollpane-transparent">
+                     <content>
+                        <VBox fx:id="vboxMain" alignment="TOP_CENTER" />
+                     </content>
+                  </ScrollPane>
                </children>
             </VBox>
          </children>
