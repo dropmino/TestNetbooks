@@ -44,18 +44,18 @@ public class DiagramFactory{
 		
 		NumberAxis xAxis = new NumberAxis();
 		CategoryAxis yAxis = new CategoryAxis();
-		BarChart<Number,String> barChart = new BarChart<>(xAxis,yAxis);
+		BarChart barChart = new BarChart(xAxis,yAxis);
 		barChart.setTitle("Top 5 books");
 		xAxis.setLabel("Numero copie vendute");
 		xAxis.setTickLabelRotation(90);
 		yAxis.setLabel("Book title");		
 		barChart.setLegendVisible(false);
-		XYChart.Series<Number, String> series = new XYChart.Series<>();
+		XYChart.Series series = new XYChart.Series();
 		
 		for (Map.Entry<BookBean, Integer> entry : books.entrySet()) {
 				if(index == 5) break;
 				index++;
-				series.getData().add(new XYChart.Data<Number, String>(entry.getValue(), entry.getKey().getTitle()));
+				series.getData().add(new XYChart.Data(entry.getValue(), entry.getKey().getTitle()));
 		}
 		series.setName("serie");
 		barChart.getData().add(series);
